@@ -43,15 +43,21 @@ const getData = (pathes) => {
 	return getAvg(data);
 }
 
-const printSorted = (data) => {
-	const array = [...data];
-	array.sort((a, b) => a[1] > b[1] ? 1 : -1);
-
-	console.log("  LANGUAGE\tAVERAGE VALUE");
-	for(const [language, value] of array) {
-		console.log(`${language.padStart(10)}\t${value.toFixed(2)}`);
-	}
+const sort = (data) => {
+	return new Map([...data].sort((a, b) => a[1] > b[1] ? 1 : -1));
 }
 
-const data = getData(pathes);
-printSorted(data);
+const writeData = (data, path) => {
+	let content = "";
+	for (const key of data.keys()) {
+		content += key + ',' + data.get(key) + '\n';
+	}
+
+	fs.writeFile(path, content, err => {
+		if (err)
+			console.log(err);
+	});
+}
+
+const data = sort(getData(pathes));
+writeData(data, "./result.csv");
