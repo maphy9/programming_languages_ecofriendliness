@@ -47,6 +47,20 @@ const sort = (data) => {
 	return new Map([...data].sort((a, b) => a[1] > b[1] ? 1 : -1));
 }
 
+const norm = (data) => {
+	let min = null;
+	for (const k of data.keys()) {
+		if (min == null)
+			min = data.get(k);
+		else if (min > data.get(k))
+			min = data.get(k);
+	}
+
+	for (const k of data.keys()) {
+		data.set(k, (data.get(k) / min).toFixed(2));
+	}
+}
+
 const writeData = (data, path) => {
 	let content = "";
 	for (const key of data.keys()) {
@@ -60,4 +74,6 @@ const writeData = (data, path) => {
 }
 
 const data = sort(getData(pathes));
+norm(data);
+
 writeData(data, "./result.csv");
